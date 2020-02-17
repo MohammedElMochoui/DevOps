@@ -121,10 +121,6 @@ definitions:
       text:
         type: "integer"
         format: "int32"
-        minimum: 0
-        maximum: 10
-        exclusiveMinimum: false
-        exclusiveMaximum: false
     example:
       code: "code"
       text: 6
