@@ -1,3 +1,4 @@
+---
 swagger: "2.0"
 info:
   description: "Swagger tutorial"
@@ -11,7 +12,7 @@ paths:
     post:
       summary: "Add a new student"
       description: ""
-      operationId: "addStudent"
+      operationId: "add_student"
       consumes:
       - "application/json"
       - "application/xml"
@@ -26,83 +27,110 @@ paths:
         schema:
           $ref: "#/definitions/Student"
       responses:
-        200:
+        "200":
           description: "successful operation"
-          schema: 
+          schema:
             type: "integer"
             format: "int64"
-        409:
-          description: "already exists"
-        405:
+        "405":
           description: "Invalid input"
+        "409":
+          description: "already exists"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
   /student/{student_id}:
     get:
       summary: "Find student by ID"
       description: "Returns a single student"
-      operationId: "getStudentById"
+      operationId: "get_student_by_id"
       produces:
       - "application/xml"
       - "application/json"
       parameters:
-        - $ref: '#/parameters/student_id'
-        - $ref: '#/parameters/subject'
+      - name: "student_id"
+        in: "path"
+        description: "ID of student to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "subject"
+        in: "query"
+        description: "The subject name"
+        required: false
+        type: "string"
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             $ref: "#/definitions/Student"
-        400:
+        "400":
           description: "Invalid ID supplied"
-        404:
+        "404":
           description: "student not found"
-          
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
     delete:
       description: ""
-      operationId: "deleteStudent"
+      operationId: "delete_student"
       produces:
-        - "application/xml"
-        - "application/json"
+      - "application/xml"
+      - "application/json"
       parameters:
-        - $ref: '#/parameters/student_id'
+      - name: "student_id"
+        in: "path"
+        description: "ID of student to return"
+        required: true
+        type: "integer"
+        format: "int64"
       responses:
-        200:
+        "200":
           description: "successful operation"
           schema:
             $ref: "#/definitions/Student"
-        400:
+        "400":
           description: "Invalid ID supplied"
-        404:
+        "404":
           description: "student not found"
-          
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
 definitions:
   Student:
-    description: "This is a student object"
-    type: object
+    type: "object"
     properties:
       student_id:
+        type: "integer"
+        format: "int64"
         description: "The student ID"
-        type: integer
-        format: int64
-      first_name: 
+      first_name:
+        type: "string"
         description: "First name of the student"
-        type: string
       last_name:
+        type: "string"
         description: "Last name of the student"
-        type: string
       grades:
+        type: "object"
         description: "Grades are stored in a Str:Float map"
-        type: object
         additionalProperties:
-          type: object
-          properties:
-            code:
-              type: string
-            text:
-              type: number
-              format: float
-              minimum: 0
-              maximum: 10
-
+          $ref: "#/definitions/Student_grades"
+    description: "This is a student object"
+    example:
+      student_id: 0
+      last_name: "last_name"
+      grades:
+        key:
+          code: "code"
+          text: 6.0274563
+      first_name: "first_name"
+  Student_grades:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      text:
+        type: "number"
+        format: "float"
+        minimum: 0
+        maximum: 10
+    example:
+      code: "code"
+      text: 6.0274563
 parameters:
   student_id:
     name: "student_id"
@@ -111,12 +139,9 @@ parameters:
     required: true
     type: "integer"
     format: "int64"
-    
   subject:
     name: "subject"
     in: "query"
     description: "The subject name"
     required: false
     type: "string"
-
-  
